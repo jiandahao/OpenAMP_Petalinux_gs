@@ -1,0 +1,18 @@
+--- arm-gic.h	2017-05-05 10:42:18.378939630 +0800
++++ arm-gic.modified.h	2017-05-05 10:42:40.202939605 +0800
+@@ -102,7 +102,14 @@
+ void gic_cascade_irq(unsigned int gic_nr, unsigned int irq);
+ void gic_cpu_if_down(void);
+ void gic_raise_softirq(const struct cpumask *mask, unsigned int irq);
+-
++#ifndef CONFIG_SMP
++//=========================added to support amp===============
++void gic_raise_softirq_amp(unsigned long cpu,unsigned int irq);
++void handle_IPI(int ipinr,struct pt_regs *regs);
++int set_ipi_handler(int ipinr,void *handler,char *desc);
++void clear_ipi_handler(int ipinr);
++#endif
++//========================================================
+ void gic_set_cpu(unsigned int cpu, unsigned int irq);
+ 
+ static inline void gic_init(unsigned int nr, int start,
